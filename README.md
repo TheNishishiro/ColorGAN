@@ -22,6 +22,8 @@ PIL
 scipy
 ```
 
+For training I used pictures downscaled to 256x384 with batch size of 1 and trained it on mobile GTX1050 for approximately 2 hours. 
+
 ### Installing and setup
 
 Now onto installing.
