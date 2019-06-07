@@ -162,7 +162,7 @@ class Pix2Pix():
         return Model([img_A, img_B], validity)
 
     def train(self, epochs, batch_size=1, sample_interval=50, model_name="hentaiGAN"):
-
+        file= open("D_G_losses.txt","a+")
         start_time = datetime.datetime.now()
 
         # Adversarial loss ground truths
@@ -195,11 +195,12 @@ class Pix2Pix():
                                                                     d_loss[0], 100*d_loss[1],
                                                                     g_loss[0],
                                                                     elapsed_time))
-
+            file.write(f"{epoch}:{d_loss[0]}:{g_loss[0]}:{elapsed_time}\n")
             # If at save interval => save generated image samples
             if epoch % sample_interval == 0:
                 self.sample_images(epoch)
                 self.export_model(model_name)
+        file.close()
 
     def sample_images(self, epoch):
         os.makedirs('./images/', exist_ok=True)
@@ -238,7 +239,7 @@ class Pix2Pix():
             try:
                 im_gray = Image.open(image).convert('L')
                 im_gray = im_gray.resize(size, Image.ANTIALIAS)
-                im = Image.open(image)
+                im = Image.open(image).convert('RGB')
                 im = im.resize(size, Image.ANTIALIAS)
 
                 im_gray = np.array(im_gray)
@@ -301,7 +302,7 @@ if __name__ == '__main__':
     model_name = input('Enter model name: ') 
     if(option == "1"):
         gan = Pix2Pix("null")
-        gan.train(epochs=40000, batch_size=1, sample_interval=200, model_name=model_name)
+        gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name)
     elif(option == "2"):
         gan = Pix2Pix(model_name)
         picture = input('Pic name: ') 
