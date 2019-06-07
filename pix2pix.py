@@ -53,13 +53,13 @@ class Pix2Pix():
             json_file.close()
             self.discriminator = model_from_json(loaded_model_json)
             self.discriminator.load_weights(f"./models/d_{model_name}.h5")
-            MyPrint("Loaded discriminator!")
+            print("Loaded discriminator!")
             json_file = open(f"./models/g_{model_name}.json", 'r')
             loaded_model_json = json_file.read()
             json_file.close()
             self.generator = model_from_json(loaded_model_json)
             self.generator.load_weights(f"./models/g_{model_name}.h5")
-            MyPrint("Loaded generator!")
+            print("Loaded generator!")
 
         self.discriminator.compile(loss='mse',
             optimizer=optimizer,
@@ -289,24 +289,23 @@ class Pix2Pix():
 
     def predict(self, imageName):
         fake_A = self.generator.predict(self.loadInputImage(imageName))
-        fake_A = 0.5 * fake_A + 0.5
-        image = Image.fromarray(fake_A.astype('uint8'), 'RGB')
-        image.save("./output/" + imageName + ".png")
+        fake_A = (0.5 * fake_A + 0.5)*255
+        image = Image.fromarray(fake_A[0].astype('uint8'), 'RGB')
+        image.save("./output/" + imageName)
         
 
 
 
 if __name__ == '__main__':
-    option = input('1) Train new model\n2)Predict\n3) Train existing\n>')  
+    option = input('1) Train new model\n2) Predict\n3) Train existing\n>')  
+    model_name = input('Enter model name: ') 
     if(option == "1"):
         gan = Pix2Pix("null")
-        gan.train(epochs=4000, batch_size=1, sample_interval=200, model_name="hentaiGAN")
+        gan.train(epochs=40000, batch_size=1, sample_interval=200, model_name=model_name)
     elif(option == "2"):
-        model_name = input('Enter model to load: ') 
         gan = Pix2Pix(model_name)
         picture = input('Pic name: ') 
         gan.predict(picture)
     elif(option == "3"):
-        model_name = input('Enter model to load: ') 
         gan = Pix2Pix(model_name)
-        gan.train(epochs=4000, batch_size=1, sample_interval=200, model_name=model_name)
+        gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name)
