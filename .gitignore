@@ -112,3 +112,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# Custom
+
+output/*
+input/*
+images/*
+data/*
