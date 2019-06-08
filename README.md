@@ -32,7 +32,7 @@ First of all you will need a proper folder structure
 
 ```
 HentaiGAN
-  data\hentai\
+  data\
   images\
   input\
   output\
@@ -40,7 +40,7 @@ HentaiGAN
 ```
 
 And explanation for each one:
-**data\hentai** - Here goes your colored hentai dataset
+**data\[datasetName]\*** - Here goes your colored datset
 **images** - Here you will find snapshots from your training progress
 **input** - Here you should put your test data and images you want to color
 **output** - Colored images will be saved in this folder
@@ -48,7 +48,7 @@ And explanation for each one:
 
 ## Preparing dataset
 
-Put your colored images in **data\hentai** idealy these should be around the same aspect ratio.
+Put your colored images in **data\[datasetName]** idealy these should be around the same aspect ratio.
 
 Then you need to make some changes in code to personalize training:
 ```
