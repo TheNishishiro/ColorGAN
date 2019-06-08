@@ -40,6 +40,7 @@ HentaiGAN
 ```
 
 And explanation for each one:
+
 **data\[datasetName]\\** - Here goes your colored datset
 
 **images** - Here you will find snapshots from your training progress
