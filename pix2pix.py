@@ -211,7 +211,7 @@ class Pix2Pix():
         sigma = var**0.5
         gauss = np.random.normal(mean,sigma,(row,col,ch))
         gauss = gauss.reshape(row,col,ch)
-        gauss = gauss / 4
+        gauss = gauss / 8
         noisy = image + gauss
         return noisy
 
@@ -258,7 +258,7 @@ class Pix2Pix():
                 if np.random.random() > 0.5:
                     im = im.transpose(Image.FLIP_LEFT_RIGHT)
                     im_gray = im_gray.transpose(Image.FLIP_LEFT_RIGHT)
-                if np.random.random() > 0.85:
+                if np.random.random() > 0.95:
                     im = im.transpose(Image.FLIP_TOP_BOTTOM)
                     im_gray = im_gray.transpose(Image.FLIP_TOP_BOTTOM)
                 
@@ -281,10 +281,10 @@ class Pix2Pix():
         imgs_B = np.array(imgs_B)
         return imgs_A, imgs_B
 
-    def loadInputImage(self, imageName):
+    def loadImage(self, imageName):
         size = (self.img_cols, self.img_rows)
         img = []
-        im_gray = Image.open("./input/" + imageName).convert('L')
+        im_gray = Image.open(imageName).convert('L')
         im_gray = im_gray.resize(size, Image.ANTIALIAS)
         im_gray = np.array(im_gray)
         im_gray = np.stack((im_gray,)*3, axis=-1)
@@ -311,26 +311,32 @@ class Pix2Pix():
 
         print("Saved model.")
 
-    def predict(self, imageName):
-        fake_A = self.generator.predict(self.loadInputImage(imageName))
-        fake_A = (0.5 * fake_A + 0.5)*255
-        image = Image.fromarray(fake_A[0].astype('uint8'), 'RGB')
-        image.save("./output/" + imageName)
+    def predictAll(self):
+        path = glob(f'./input/*')
+        im_num = 0
+        print(path)
+        for inp in path:
+            fake_A = self.generator.predict(self.loadImage(inp))
+            fake_A = (0.5 * fake_A + 0.5)*255
+            image = Image.fromarray(fake_A[0].astype('uint8'), 'RGB')
+            image.save("./output/" + str(im_num) + ".png")
+            im_num += 1
         
 
 
 
 if __name__ == '__main__':
-    option = input('1) Train new model\n2) Predict\n3) Train existing\n>')  
+    option = input('1) Train new model\n2) Predict all\n3) Train existing\n>')  
     model_name = input('Enter model name: ') 
-    dataset_folder = input('Enter dataset folder: ')
+
     if(option == "1"):
+        dataset_folder = input('Enter dataset folder: ')
         gan = Pix2Pix("null", dataset_folder)
         gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name)
     elif(option == "2"):
-        gan = Pix2Pix(model_name, dataset_folder)
-        picture = input('Pic name: ') 
-        gan.predict(picture)
+        gan = Pix2Pix(model_name, "")
+        gan.predictAll()
     elif(option == "3"):
+        dataset_folder = input('Enter dataset folder: ')
         gan = Pix2Pix(model_name, dataset_folder)
         gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name.split('_')[0])
