@@ -125,9 +125,9 @@ class Pix2Pix():
         d7 = conv2d(d6, self.gf*8)
 
         # Upsampling
-        u1 = deconv2d(d7, d6, self.gf*8)
-        u2 = deconv2d(u1, d5, self.gf*8)
-        u3 = deconv2d(u2, d4, self.gf*8)
+        u1 = deconv2d(d7, d6, self.gf*8, 4, 0.25)
+        u2 = deconv2d(u1, d5, self.gf*8, 4, 0.25)
+        u3 = deconv2d(u2, d4, self.gf*8, 4, 0.2)
         u4 = deconv2d(u3, d3, self.gf*4)
         u5 = deconv2d(u4, d2, self.gf*2)
         u6 = deconv2d(u5, d1, self.gf)
@@ -211,6 +211,7 @@ class Pix2Pix():
         sigma = var**0.5
         gauss = np.random.normal(mean,sigma,(row,col,ch))
         gauss = gauss.reshape(row,col,ch)
+        gauss = gauss / 4
         noisy = image + gauss
         return noisy
 
@@ -257,19 +258,19 @@ class Pix2Pix():
                 if np.random.random() > 0.5:
                     im = im.transpose(Image.FLIP_LEFT_RIGHT)
                     im_gray = im_gray.transpose(Image.FLIP_LEFT_RIGHT)
-                if np.random.random() > 0.2:
+                if np.random.random() > 0.85:
                     im = im.transpose(Image.FLIP_TOP_BOTTOM)
                     im_gray = im_gray.transpose(Image.FLIP_TOP_BOTTOM)
                 
                 im_gray = np.array(im_gray)
                 im_gray = np.stack((im_gray,)*3, axis=-1)
                 im = np.array(im)
-                if np.random.random() > 0.35:
-                    im = self.noise(im)
-                    
+                
+
                 im_gray = (im_gray / 127.5) - 1
                 im = (im / 127.5) - 1
-                
+                if np.random.random() > 0.5:
+                    im = self.noise(im)
 
                 imgs_A.append(im)
                 imgs_B.append(im_gray)
