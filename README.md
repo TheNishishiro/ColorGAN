@@ -40,10 +40,14 @@ HentaiGAN
 ```
 
 And explanation for each one:
-**data\[datasetName]\*** - Here goes your colored datset
+**data\[datasetName]\\** - Here goes your colored datset
+
 **images** - Here you will find snapshots from your training progress
+
 **input** - Here you should put your test data and images you want to color
+
 **output** - Colored images will be saved in this folder
+
 **models** - A place for trained exported models
 
 ## Preparing dataset
