@@ -116,10 +116,13 @@ dmypy.json
 
 # Custom
 
-D_G_losses.txt
+D_G_losses.csv
+H_D_G_losses.csv
 
 output/*
 input/*
 images/*
 data/*
 models/*
+H_images/*
+H_models/*

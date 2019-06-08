@@ -18,9 +18,10 @@ from PIL import Image
 from glob import glob
 
 class Pix2Pix():
-    def __init__(self, model_name):
+    def __init__(self, model_name, dataset_folder):
         # Input shape
-        self.img_rows = 384
+        self.DatasetFolder = dataset_folder
+        self.img_rows = 256 #384
         self.img_cols = 256
         self.channels_color = 3
         self.channels_mono = 3
@@ -144,6 +145,7 @@ class Pix2Pix():
             d = LeakyReLU(alpha=0.2)(d)
             if bn:
                 d = BatchNormalization(momentum=0.8)(d)
+            d = Dropout(0.25)(d)
             return d
 
         img_A = Input(shape=self.img_shape_color)
@@ -162,7 +164,7 @@ class Pix2Pix():
         return Model([img_A, img_B], validity)
 
     def train(self, epochs, batch_size=1, sample_interval=50, model_name="hentaiGAN"):
-        file= open("D_G_losses.txt","a+")
+        file= open("D_G_losses.csv","a+")
         start_time = datetime.datetime.now()
 
         # Adversarial loss ground truths
@@ -199,8 +201,19 @@ class Pix2Pix():
             # If at save interval => save generated image samples
             if epoch % sample_interval == 0:
                 self.sample_images(epoch)
-                self.export_model(model_name)
+                self.export_model(model_name, epoch)
         file.close()
+
+    def noise(self,image):
+        row,col,ch= image.shape
+        mean = 0
+        var = 0.1
+        sigma = var**0.5
+        gauss = np.random.normal(mean,sigma,(row,col,ch))
+        gauss = gauss.reshape(row,col,ch)
+        noisy = image + gauss
+        return noisy
+
 
     def sample_images(self, epoch):
         os.makedirs('./images/', exist_ok=True)
@@ -233,7 +246,7 @@ class Pix2Pix():
         imgs_A = []
         imgs_B = []
 
-        path = glob('./data/hentai/*')
+        path = glob(f'./data/{self.DatasetFolder}/*')
         batch_images = np.random.choice(path, size=batch_size)
         for image in batch_images:
             try:
@@ -241,14 +254,22 @@ class Pix2Pix():
                 im_gray = im_gray.resize(size, Image.ANTIALIAS)
                 im = Image.open(image).convert('RGB')
                 im = im.resize(size, Image.ANTIALIAS)
-
+                if np.random.random() > 0.5:
+                    im = im.transpose(Image.FLIP_LEFT_RIGHT)
+                    im_gray = im_gray.transpose(Image.FLIP_LEFT_RIGHT)
+                if np.random.random() > 0.2:
+                    im = im.transpose(Image.FLIP_TOP_BOTTOM)
+                    im_gray = im_gray.transpose(Image.FLIP_TOP_BOTTOM)
+                
                 im_gray = np.array(im_gray)
                 im_gray = np.stack((im_gray,)*3, axis=-1)
                 im = np.array(im)
-
+                if np.random.random() > 0.35:
+                    im = self.noise(im)
+                    
                 im_gray = (im_gray / 127.5) - 1
                 im = (im / 127.5) - 1
-
+                
 
                 imgs_A.append(im)
                 imgs_B.append(im_gray)
@@ -273,10 +294,11 @@ class Pix2Pix():
 
 
             
-    def export_model(self, model_name):
+    def export_model(self, model_name, epoch):
         # serialize model to JSON
         os.makedirs('./models/', exist_ok=True)
         model_json = self.discriminator.to_json()
+        model_name = model_name + "_v" + str(int(epoch/1000))
         with open(f"./models/d_{model_name}.json", "w") as json_file:
             json_file.write(model_json)
         self.discriminator.save_weights(f"./models/d_{model_name}.h5")
@@ -300,13 +322,14 @@ class Pix2Pix():
 if __name__ == '__main__':
     option = input('1) Train new model\n2) Predict\n3) Train existing\n>')  
     model_name = input('Enter model name: ') 
+    dataset_folder = input('Enter dataset folder: ')
     if(option == "1"):
-        gan = Pix2Pix("null")
+        gan = Pix2Pix("null", dataset_folder)
         gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name)
     elif(option == "2"):
-        gan = Pix2Pix(model_name)
+        gan = Pix2Pix(model_name, dataset_folder)
         picture = input('Pic name: ') 
         gan.predict(picture)
     elif(option == "3"):
-        gan = Pix2Pix(model_name)
-        gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name)
+        gan = Pix2Pix(model_name, dataset_folder)
+        gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name.split('_')[0])
