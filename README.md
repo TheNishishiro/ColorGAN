@@ -92,7 +92,32 @@ If you are using predict option keep in mind file you enter needs to be present 
 
 ## Results
 
+Training set:
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/10_400.png)
+
+Test set:
+Epoch 0:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/0.png)
+Epoch 1:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/1.png)
+Epoch 2:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/2.png)
+Epoch 3:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/3.png)
+Epoch 4:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/4.png)
+Epoch 5:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/5.png)
+Epoch 6:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/6.png)
+Epoch 7:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/7.png)
+Epoch 8:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/8.png)
+Epoch 9:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/9.png)
+Epoch 10:
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/10.png)
 
 ## License
 
