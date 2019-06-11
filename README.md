@@ -69,6 +69,8 @@ gan.train(epochs=200, batch_size=16, sample_interval=200, model_name=model_name)
 
 Reason for my values were dictated by a pretty weak GPU so I couldn't really afford better resolution nor bigger batch
 
+In case you want to train it with the same dataset you can download it [from here](https://github.com/Mckinsey666/Anime-Face-Dataset).
+
 ## Using pretrained model
 
 Just make sure these
@@ -88,6 +90,10 @@ You'll be greeted with a simple text menu just follow instructions!
 
 If you are using predict option keep in mind file you enter needs to be present in **input** folder.
 
+## Results
+
+![alt text](https://drive.google.com/file/d/150KQIrcrkbEnjkQC6aAiQtSY0on9axy5/view?usp=sharing)
+
 ## License
 
 This project is licensed under the MIT License
@@ -95,4 +101,5 @@ This project is licensed under the MIT License
 ## Acknowledgments
 
 * Pix2Pix implementation from https://github.com/eriklindernoren/Keras-GAN
+* Dataset from https://github.com/Mckinsey666/Anime-Face-Dataset
 * Thank you to my friends for idea for this *beautiful* and *useful* project
