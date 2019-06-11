@@ -22,8 +22,8 @@ PIL
 scipy
 ```
 
-For training I used pictures downscaled to 256x384 with batch size of 1 and trained it on mobile GTX1050 4GB for approximately 2 hours. 
-
+For training I used upscaled 64x64 pictures to 256x256 with batch size of 16 and trained it on Google Colab for 10 epoches on 20,000 images
+ 
 ### Installing and setup
 
 Now onto installing.
@@ -57,14 +57,14 @@ Put your colored images in **data\[datasetName]** idealy these should be around 
 
 Then you need to make some changes in code to personalize training:
 ```
-        self.img_rows = 384 # Change this to your desired image height
+        self.img_rows = 256 # Change this to your desired image height
         self.img_cols = 256 # Change this to your desired image width
 ```
 Keep in mind that these have to be dividable by 64.
 
 You can also change the batch size at the very bottom (default is one)
 ```
-gan.train(epochs=40000, batch_size=1, sample_interval=200, model_name=model_name)
+gan.train(epochs=200, batch_size=16, sample_interval=200, model_name=model_name)
 ```
 
 Reason for my values were dictated by a pretty weak GPU so I couldn't really afford better resolution nor bigger batch
