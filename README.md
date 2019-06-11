@@ -69,6 +69,8 @@ gan.train(epochs=200, batch_size=16, sample_interval=200, model_name=model_name)
 
 Reason for my values were dictated by a pretty weak GPU so I couldn't really afford better resolution nor bigger batch
 
+In case you want to train it with the same dataset you can download it [from here](https://github.com/Mckinsey666/Anime-Face-Dataset).
+
 ## Using pretrained model
 
 Just make sure these
@@ -88,6 +90,58 @@ You'll be greeted with a simple text menu just follow instructions!
 
 If you are using predict option keep in mind file you enter needs to be present in **input** folder.
 
+## Results
+
+Training set:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/10_400.png)
+
+Test set:
+
+Epoch 0:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/0.png)
+
+Epoch 1:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/1.png)
+
+Epoch 2:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/2.png)
+
+Epoch 3:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/3.png)
+
+Epoch 4:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/4.png)
+
+Epoch 5:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/5.png)
+
+Epoch 6:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/6.png)
+
+Epoch 7:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/7.png)
+
+Epoch 8:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/8.png)
+
+Epoch 9:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/9.png)
+
+Epoch 10:
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/10.png)
+
 ## License
 
 This project is licensed under the MIT License
@@ -95,4 +149,5 @@ This project is licensed under the MIT License
 ## Acknowledgments
 
 * Pix2Pix implementation from https://github.com/eriklindernoren/Keras-GAN
+* Dataset from https://github.com/Mckinsey666/Anime-Face-Dataset
 * Thank you to my friends for idea for this *beautiful* and *useful* project
