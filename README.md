@@ -92,7 +92,7 @@ If you are using predict option keep in mind file you enter needs to be present 
 
 ## Results
 
-![alt text](https://drive.google.com/file/d/150KQIrcrkbEnjkQC6aAiQtSY0on9axy5/view?usp=sharing)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/10_400.png)
 
 ## License
 
