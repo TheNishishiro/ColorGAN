@@ -1,0 +1,31 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+</head>
+<body>
+
+<div class="header">
+	<ul>
+	  <li><a class="active" href="home">Home</a></li>
+	  <li><a href="#news">Settings</a></li>
+	  <li><a href="#contact">Contact</a></li>
+	  <li><a href="#about">About</a></li>
+	</ul>
+</div>
+
+<div class="page__content-container">
+  	<div class="mainWindow">
+		<div class="center">
+			<br>
+				{% block form %}{% endblock %}	
+		    	{% block content %}{% endblock %}	
+		</div>
+	</div>
+</div>
+
+
+
+</body>
+</html> 

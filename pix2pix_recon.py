@@ -1,14 +1,17 @@
 from __future__ import print_function, division
-import scipy
+from skimage import io, color
+from skimage.transform import rescale, resize, downscale_local_mean
 
 from keras.datasets import mnist
+from keras_contrib.layers.normalization.instancenormalization import InstanceNormalization
 from keras.layers import Input, Dense, Reshape, Flatten, Dropout, Concatenate
 from keras.layers import BatchNormalization, Activation, ZeroPadding2D
 from keras.layers.advanced_activations import LeakyReLU
-from keras.layers.convolutional import UpSampling2D, Conv2D
+from keras.layers.convolutional import UpSampling2D, Conv2D, Conv2DTranspose
 from keras.models import Sequential, Model
 from keras.optimizers import Adam
 from keras.models import model_from_json
+from keras import backend as K
 import datetime
 import matplotlib.pyplot as plt
 import sys
@@ -24,10 +27,10 @@ class Pix2Pix():
         self.img_rows = 256 #384
         self.img_cols = 256
         self.channels_color = 3
-        self.channels_mono = 3
+        self.channels_mono = 1
         self.img_shape_color = (self.img_rows, self.img_cols, self.channels_color)
         self.img_shape_mono = (self.img_rows, self.img_cols, self.channels_mono)
-
+        self.n_batches = 0
         # Configure data loader
 
 
@@ -87,8 +90,7 @@ class Pix2Pix():
         valid = self.discriminator([fake_A, img_B])
 
         self.combined = Model(inputs=[img_A, img_B], outputs=[valid, fake_A])
-        self.combined.compile(loss=['mse', 'mae'],
-                              loss_weights=[1, 100],
+        self.combined.compile(loss=['mse', 'mae'], loss_weights=[1, 100],
                               optimizer=optimizer)
 
     def build_generator(self):
@@ -125,9 +127,9 @@ class Pix2Pix():
         d7 = conv2d(d6, self.gf*8)
 
         # Upsampling
-        u1 = deconv2d(d7, d6, self.gf*8, 4, 0.25)
-        u2 = deconv2d(u1, d5, self.gf*8, 4, 0.25)
-        u3 = deconv2d(u2, d4, self.gf*8, 4, 0.2)
+        u1 = deconv2d(d7, d6, self.gf*8)
+        u2 = deconv2d(u1, d5, self.gf*8)
+        u3 = deconv2d(u2, d4, self.gf*8)
         u4 = deconv2d(u3, d3, self.gf*4)
         u5 = deconv2d(u4, d2, self.gf*2)
         u6 = deconv2d(u5, d1, self.gf)
@@ -145,7 +147,6 @@ class Pix2Pix():
             d = LeakyReLU(alpha=0.2)(d)
             if bn:
                 d = BatchNormalization(momentum=0.8)(d)
-            d = Dropout(0.25)(d)
             return d
 
         img_A = Input(shape=self.img_shape_color)
@@ -170,74 +171,105 @@ class Pix2Pix():
         # Adversarial loss ground truths
         valid = np.ones((batch_size,) + self.disc_patch)
         fake = np.zeros((batch_size,) + self.disc_patch)
-
+        print(valid.shape)
+        d_loss_real = [0,0]
+        d_loss_fake = [0,0]
+        d_loss = [0,0]
         for epoch in range(epochs):
-            # ---------------------
-            #  Train Discriminator
-            # ---------------------
-            imgs_A, imgs_B = self.load_images(batch_size)
-            # Condition on B and generate a translated version
-            fake_A = self.generator.predict(imgs_B)
+            for batch_i, (imgs_A, imgs_B) in enumerate(self.load_batch(batch_size)):
+                # ---------------------
+                #  Train Discriminator
+                # ---------------------
+                #imgs_A, imgs_B = self.load_images(batch_size)
+                # Condition on B and generate a translated version
+                fake_A = self.generator.predict(imgs_B)
 
-            # Train the discriminators (original images = real / generated = Fake)
-            d_loss_real = self.discriminator.train_on_batch([imgs_A, imgs_B], valid)
-            d_loss_fake = self.discriminator.train_on_batch([fake_A, imgs_B], fake)
-            d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
+                # Train the discriminators (original images = real / generated = Fake)
+                d_loss_real = self.discriminator.train_on_batch([imgs_A, imgs_B], valid)
+                d_loss_fake = self.discriminator.train_on_batch([fake_A, imgs_B], fake)
+                d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
 
-            # -----------------
-            #  Train Generator
-            # -----------------
+                # -----------------
+                #  Train Generator
+                # -----------------
 
-            # Train the generators
-            g_loss = self.combined.train_on_batch([imgs_A, imgs_B], [valid, imgs_A])
+                # Train the generators
 
-            elapsed_time = datetime.datetime.now() - start_time
-            # Plot the progress
-            print ("[Epoch %d/%d] [D loss: %f, acc: %3d%%] [G loss: %f] time: %s" % (epoch, epochs,
-                                                                    d_loss[0], 100*d_loss[1],
-                                                                    g_loss[0],
-                                                                    elapsed_time))
-            file.write(f"{epoch}:{d_loss[0]}:{g_loss[0]}:{elapsed_time}\n")
-            # If at save interval => save generated image samples
-            if epoch % sample_interval == 0:
-                self.sample_images(epoch)
-                self.export_model(model_name, epoch)
+                g_loss = self.combined.train_on_batch([imgs_A, imgs_B], [valid, imgs_A])
+
+                elapsed_time = datetime.datetime.now() - start_time
+                # Plot the progress
+                print ("[Epoch %d/%d] [Batch %d/%d] [D loss: %f, acc: %3d%%] [G loss: %f] time: %s" % (epoch, epochs,
+                                                                        batch_i, self.n_batches,
+                                                                        d_loss[0], 100*d_loss[1],
+                                                                        g_loss[0],
+                                                                        elapsed_time))
+                # If at save interval => save generated image samples
+
+                if batch_i  % sample_interval == 0:
+                    self.sample_images(str(epoch) + "_" + str(batch_i))
+            self.export_model(model_name, epoch)
         file.close()
 
-    def noise(self,image):
-        row,col,ch= image.shape
-        mean = 0
-        var = 0.1
-        sigma = var**0.5
-        gauss = np.random.normal(mean,sigma,(row,col,ch))
-        gauss = gauss.reshape(row,col,ch)
-        gauss = gauss / 8
-        noisy = image + gauss
-        return noisy
-
-
     def sample_images(self, epoch):
-        os.makedirs('./images/', exist_ok=True)
-        r, c = 3, 3
+        path = glob(f'./data/{self.DatasetFolder}/*')
+        batch_images = np.random.choice(path, size=3)
 
-        imgs_A, imgs_B = self.load_images(batch_size=3)
-        fake_A = self.generator.predict(imgs_B)
+        conc = []
+        conFinal = []
+        for inp in batch_images:
 
-        gen_imgs = np.concatenate([imgs_B, fake_A, imgs_A])
+            fake_A = np.expand_dims(self.loadImage(inp)[0], axis=3)
+            fake_A = self.generator.predict(fake_A)
+            fake_A = (fake_A + 1)*127.5
 
-        # Rescale images 0 - 1
-        gen_imgs = 0.5 * gen_imgs + 0.5
+            gray = self.loadImage(inp)[0]
+            gray = np.stack((gray,)*3, axis=-1)
+            gray = (gray + 1)*127.5
 
-        titles = ['Condition', 'Generated', 'Original']
-        fig, axs = plt.subplots(r, c)
-        cnt = 0
-        for i in range(r):
-            for j in range(c):
-                axs[i,j].imshow(gen_imgs[cnt])
-                axs[i, j].set_title(titles[i])
-                cnt += 1
-        fig.savefig("images/%d.png" % epoch)
-        plt.close()
+            col = self.loadImage(inp)[1]
+            col = (col + 1)*127.5
+
+            conc.append(np.vstack((gray[0], fake_A[0], col[0])))
+
+            if(len(conc) == 2 and conFinal == []):
+                conFinal = np.hstack((conc[0], conc[1]))
+                conc = []
+            elif(len(conc) == 1 and conFinal != []):
+                conFinal = np.hstack((conc[0], conFinal))
+                conc = []
+
+        image = Image.fromarray(conFinal.astype('uint8'), 'RGB')
+        image.save("./images/" + str(epoch) + ".png")
+
+    def load_batch(self, batch_size=1):
+        size = (self.img_cols, self.img_rows)
+        path = glob(f'./data/{self.DatasetFolder}/*')
+        self.n_batches = int(len(path) / batch_size)
+        for i in range(self.n_batches-1):
+            batch = path[i*batch_size:(i+1)*batch_size]
+            imgs_A, imgs_B = [], []
+            for img in batch:
+                im_gray = Image.open(img).convert('L')
+                im_gray = im_gray.resize(size, Image.ANTIALIAS)
+                im = Image.open(img).convert('RGB')
+                im = im.resize(size, Image.ANTIALIAS)
+                if np.random.random() > 0.5:
+                    im = im.transpose(Image.FLIP_LEFT_RIGHT)
+                    im_gray = im_gray.transpose(Image.FLIP_LEFT_RIGHT)
+                
+                im_gray = np.array(im_gray)
+                im_gray = np.expand_dims(im_gray, axis=3)
+                #im_gray = np.stack((im_gray,)*3, axis=-1)
+                im = np.array(im)
+
+                imgs_A.append(im)
+                imgs_B.append(im_gray)
+
+            imgs_A = np.array(imgs_A)/127.5 - 1.
+            imgs_B = np.array(imgs_B)/127.5 - 1.
+
+            yield imgs_A, imgs_B
 
 
     def load_images(self, batch_size):
@@ -258,19 +290,15 @@ class Pix2Pix():
                 if np.random.random() > 0.5:
                     im = im.transpose(Image.FLIP_LEFT_RIGHT)
                     im_gray = im_gray.transpose(Image.FLIP_LEFT_RIGHT)
-                if np.random.random() > 0.95:
-                    im = im.transpose(Image.FLIP_TOP_BOTTOM)
-                    im_gray = im_gray.transpose(Image.FLIP_TOP_BOTTOM)
                 
                 im_gray = np.array(im_gray)
-                im_gray = np.stack((im_gray,)*3, axis=-1)
+                im_gray = np.expand_dims(im_gray, axis=3)
+                #im_gray = np.stack((im_gray,)*3, axis=-1)
                 im = np.array(im)
-                
 
                 im_gray = (im_gray / 127.5) - 1
                 im = (im / 127.5) - 1
-                if np.random.random() > 0.5:
-                    im = self.noise(im)
+                
 
                 imgs_A.append(im)
                 imgs_B.append(im_gray)
@@ -284,14 +312,26 @@ class Pix2Pix():
     def loadImage(self, imageName):
         size = (self.img_cols, self.img_rows)
         img = []
+        img2 = []
+
         im_gray = Image.open(imageName).convert('L')
         im_gray = im_gray.resize(size, Image.ANTIALIAS)
         im_gray = np.array(im_gray)
-        im_gray = np.stack((im_gray,)*3, axis=-1)
+        #im_gray = np.expand_dims(im_gray, axis=3)
+        #im_gray = np.stack((im_gray,)*3, axis=-1)
         im_gray = (im_gray / 127.5) - 1
+        
         img.append(im_gray)
         img = np.array(img)
-        return img
+
+        im = Image.open(imageName).convert('RGB')
+        im = im.resize(size, Image.ANTIALIAS)
+        im = np.array(im)
+        im = (im / 127.5) - 1
+        img2.append(im)
+        img2 = np.array(img2)
+
+        return [img, img2]
 
 
             
@@ -299,7 +339,7 @@ class Pix2Pix():
         # serialize model to JSON
         os.makedirs('./models/', exist_ok=True)
         model_json = self.discriminator.to_json()
-        model_name = model_name + "_v" + str(int(epoch/1000))
+        model_name = model_name + "_v" + str(epoch)
         with open(f"./models/d_{model_name}.json", "w") as json_file:
             json_file.write(model_json)
         self.discriminator.save_weights(f"./models/d_{model_name}.h5")
@@ -311,18 +351,70 @@ class Pix2Pix():
 
         print("Saved model.")
 
+
+    def predictAllConc(self):
+        path = glob(f'./input/*')
+        im_num = 0
+        print(path)
+        conc = []
+        conFinal = []
+        for inp in path:
+            fake_A = np.expand_dims(self.loadImage(inp)[0], axis=3)
+            fake_A = self.generator.predict(fake_A)
+            fake_A = (0.5 * fake_A + 0.5)*255
+
+            gray = self.loadImage(inp)[0]
+            gray = np.stack((gray,)*3, axis=-1)
+            gray = (0.5 * gray + 0.5)*255
+
+            conc.append(np.vstack((gray[0], fake_A[0])))
+
+            if(len(conc) == 2 and conFinal == []):
+                conFinal = np.hstack((conc[0], conc[1]))
+                conc = []
+            elif(len(conc) == 1 and conFinal != []):
+                conFinal = np.hstack((conc[0], conFinal))
+                conc = []
+
+        image = Image.fromarray(conFinal.astype('uint8'), 'RGB')
+        image.save("./output/" + str(im_num) + ".png")
+        im_num += 1
+
     def predictAll(self):
         path = glob(f'./input/*')
         im_num = 0
         print(path)
+        conc = []
+        conFinal = []
         for inp in path:
-            fake_A = self.generator.predict(self.loadImage(inp))
+            fake_A = np.expand_dims(self.loadImage(inp)[0], axis=3)
+            fake_A = self.generator.predict(fake_A)
             fake_A = (0.5 * fake_A + 0.5)*255
-            image = Image.fromarray(fake_A[0].astype('uint8'), 'RGB')
-            image.save("./output/" + str(im_num) + ".png")
-            im_num += 1
-        
 
+            gray = self.loadImage(inp)[0]
+            gray = np.stack((gray,)*3, axis=-1)
+            gray = (0.5 * gray + 0.5)*255
+
+            conc = np.vstack((gray[0], fake_A[0]))
+            """
+            if(len(conc) == 2 and conFinal == []):
+                conFinal = np.hstack((conc[0], conc[1]))
+                conc = []
+            elif(len(conc) == 1 and conFinal != []):
+                conFinal = np.hstack((conc[0], conFinal))
+                conc = []
+            """
+            image = Image.fromarray(conc.astype('uint8'), 'RGB')
+            image.save("./static/output/" + str(im_num) + ".png")
+            im_num += 1
+            
+
+def predictUploaded(model, filename):
+    K.clear_session()
+    gan = Pix2Pix(model, "")
+    gan.predictAll()
+    print(filename)
+    os.remove(f'./input/{filename}')
 
 
 if __name__ == '__main__':
@@ -332,11 +424,13 @@ if __name__ == '__main__':
     if(option == "1"):
         dataset_folder = input('Enter dataset folder: ')
         gan = Pix2Pix("null", dataset_folder)
-        gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name)
+        gan.train(epochs=200, batch_size=1, sample_interval=200, model_name=model_name)
     elif(option == "2"):
         gan = Pix2Pix(model_name, "")
-        gan.predictAll()
+        gan.predictAllConc()
     elif(option == "3"):
         dataset_folder = input('Enter dataset folder: ')
         gan = Pix2Pix(model_name, dataset_folder)
-        gan.train(epochs=400000, batch_size=1, sample_interval=200, model_name=model_name.split('_')[0])
+        gan.train(epochs=200, batch_size=1, sample_interval=200, model_name=model_name.split('_')[0])
+
+
