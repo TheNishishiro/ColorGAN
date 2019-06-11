@@ -119,7 +119,6 @@ dmypy.json
 D_G_losses.csv
 H_D_G_losses.csv
 
-output/*
 input/*
 images/*
 data/*
