@@ -22,6 +22,7 @@ from glob import glob
 
 class Pix2Pix():
     def __init__(self, model_name, dataset_folder):
+        print(f"MODEL {model_name} LODING")
         # Input shape
         self.DatasetFolder = dataset_folder
         self.img_rows = 256 #384
@@ -394,9 +395,9 @@ class Pix2Pix():
             gray = self.loadImage(inp)[0]
             gray = np.stack((gray,)*3, axis=-1)
             gray = (0.5 * gray + 0.5)*255
-
-            conc = np.vstack((gray[0], fake_A[0]))
             """
+            conc = np.vstack((gray[0], fake_A[0]))
+            
             if(len(conc) == 2 and conFinal == []):
                 conFinal = np.hstack((conc[0], conc[1]))
                 conc = []
@@ -404,7 +405,7 @@ class Pix2Pix():
                 conFinal = np.hstack((conc[0], conFinal))
                 conc = []
             """
-            image = Image.fromarray(conc.astype('uint8'), 'RGB')
+            image = Image.fromarray(fake_A[0].astype('uint8'), 'RGB')
             image.save("./static/output/" + str(im_num) + ".png")
             im_num += 1
             
