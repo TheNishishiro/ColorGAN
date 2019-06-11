@@ -1,4 +1,4 @@
-# HentaiGAN
+# ColorGAN
 
 GANs to color grayscaled manga pages
 
@@ -73,7 +73,7 @@ Reason for my values were dictated by a pretty weak GPU so I couldn't really aff
 
 Just make sure these
 ```
-        self.img_rows = 384 # Change this to your desired image height
+        self.img_rows = 256 # Change this to your desired image height
         self.img_cols = 256 # Change this to your desired image width
 ```
 are set to the same values as the pretrained model used because the same values are being used to load and rescale images, if you use different values input might have a wrong shape.
