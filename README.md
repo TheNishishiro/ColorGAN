@@ -173,5 +173,5 @@ This project is licensed under the MIT License
 
 * Pix2Pix implementation from https://github.com/eriklindernoren/Keras-GAN
 * Dataset for faces from https://github.com/Mckinsey666/Anime-Face-Dataset
-* Dataset for manga from nhentai (sorry fro scrapping ♥)
+* Dataset for manga from nhentai (sorry for scrapping ♥)
 * Thank you to my friends for idea for this *beautiful* and *useful* project
