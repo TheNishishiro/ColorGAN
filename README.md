@@ -92,6 +92,8 @@ If you are using predict option keep in mind file you enter needs to be present 
 
 ## Results
 
+# Anime characters:
+
 Training set:
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/10_400.png)
@@ -141,6 +143,10 @@ Epoch 9:
 Epoch 10:
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/10.png)
+
+# Manga pages
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/manga.png)
 
 ## License
 
