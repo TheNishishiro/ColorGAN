@@ -73,12 +73,18 @@ In case you want to train it with the same dataset you can download it [from her
 
 ## Using pretrained model
 
+(Download link to pretrained models can be found on the bottom)
+
 Just make sure these
 ```
         self.img_rows = 256 # Change this to your desired image height
         self.img_cols = 256 # Change this to your desired image width
 ```
 are set to the same values as the pretrained model used because the same values are being used to load and rescale images, if you use different values input might have a wrong shape.
+
+Then put images in your **input** folder.
+
+After running the program chose 2 from menu and insert model name as **face_v8** depending on your model
 
 ## Running the test
 
@@ -92,7 +98,7 @@ If you are using predict option keep in mind file you enter needs to be present 
 
 ## Results
 
-# Anime characters:
+### Anime characters:
 
 Training set:
 
@@ -144,9 +150,20 @@ Epoch 10:
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/10.png)
 
-# Manga pages
+### Manga pages
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/manga.png)
+
+## Models for download
+
+3 of my pretrained models can be found [here](https://drive.google.com/drive/folders/1e3vJHR9x4Yci6UAFbAz0rv14oh9HJwY3?usp=sharing)
+
+Each model is represented by 4 files **d_name_version.json**, **d_name_version.h5**, **g_name_version.json** and **g_name_version.h5**.
+
+*face* - For face coloring like examples up there (input of 256x256)
+*hGAN* - For coloring of hentai pages (input of 256x384)(included versions 24 and 35 because I only checked v24 and am not sure if v35 isn't overfitted)
+
+Download 4 files of a model and put them into **models** folder
 
 ## License
 
@@ -155,5 +172,6 @@ This project is licensed under the MIT License
 ## Acknowledgments
 
 * Pix2Pix implementation from https://github.com/eriklindernoren/Keras-GAN
-* Dataset from https://github.com/Mckinsey666/Anime-Face-Dataset
+* Dataset for faces from https://github.com/Mckinsey666/Anime-Face-Dataset
+* Dataset for manga from nhentai (sorry fro scrapping ♥)
 * Thank you to my friends for idea for this *beautiful* and *useful* project
