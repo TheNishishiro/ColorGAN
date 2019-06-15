@@ -4,7 +4,7 @@ GANs to color grayscaled manga pages
 
 ## Getting Started
 
-Instructions below will help you set things up and get started so let's go!
+Instructions below will help you set things up and get started, just be aware that it's still early development, the code is a mess and a subject to changes which I'm still working on, but here we go anyway!
 
 ### Prerequisites
 
@@ -20,6 +20,7 @@ numpy
 glob
 PIL
 scipy
+Flask (for web app only)
 ```
 
 For training I used upscaled 64x64 pictures to 256x256 with batch size of 16 and trained it on Google Colab for 10 epoches on 20,000 images
@@ -37,6 +38,7 @@ HentaiGAN
   input\
   output\
   models\
+  static\output\  (for web app only)
 ```
 
 And explanation for each one:
@@ -90,11 +92,34 @@ After running the program chose 2 from menu and insert model name as **face_v8**
 
 To run it, simply use following in your cmd or terminal:
 ```
-python pix2pix.py
+python pix2pix_recon.py
 ```
 You'll be greeted with a simple text menu just follow instructions!
 
 If you are using predict option keep in mind file you enter needs to be present in **input** folder.
+
+## Running web app
+
+It's not quite ready, not even close, but if you're desperate to then here is how to get it to work
+
+Edit line 7 and 15 of **main.py**
+```
+model = "face_v8"
+UPLOAD_FOLDER = './input/'
+```
+to model which you want to use and a folder to which you want to save uploaded pics.
+
+Then run
+```
+python main.py
+```
+Your server should go up on a localhost, for me 127.0.0.1:5000
+
+Uploaded files will be save to upload folder, processed, saved into **static/output** and removed from upload folder.
+
+
+
+No sunshines nor rainbows, it's just a simple thing I wrote for my presentation that haven't even been used but it's still there.
 
 ## Results
 
@@ -161,6 +186,7 @@ Epoch 10:
 Each model is represented by 4 files **d_name_version.json**, **d_name_version.h5**, **g_name_version.json** and **g_name_version.h5**.
 
 *face* - For face coloring like examples up there (input of 256x256)
+
 *hGAN* - For coloring of hentai pages (input of 256x384)(included versions 24 and 35 because I only checked v24 and am not sure if v35 isn't overfitted)
 
 Download 4 files of a model and put them into **models** folder
