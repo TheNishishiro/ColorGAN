@@ -25,7 +25,7 @@ class Pix2Pix():
         print(f"MODEL {model_name} LODING")
         # Input shape
         self.DatasetFolder = dataset_folder
-        self.img_rows = 256 #384
+        self.img_rows = 384 #384
         self.img_cols = 256
         self.channels_color = 3
         self.channels_mono = 1
