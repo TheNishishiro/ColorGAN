@@ -131,10 +131,6 @@ Training set:
 
 Test set:
 
-Epoch 0:
-
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/0.png)
-
 Epoch 1:
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/1.png)
