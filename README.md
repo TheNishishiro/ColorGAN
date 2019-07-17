@@ -187,9 +187,9 @@ Each model is represented by 4 files **d_name_version.json**, **d_name_version.h
 
 Download 4 files of a model and put them into **models** folder
 
-## Dataset
+## Dataset (18+ warning)
 
-Hentai dataset containing around 30k pages of colored hentai scaled down to 256x384 can be found [here](https://drive.google.com/file/d/1WkUn1CqaiPx9XD_V5X-s9VxybsdtgnwK/view?usp=sharing)
+Hentai dataset containing around 30k pages of colored hentai scrapped randomly from nhentai and scaled down to 256x384 can be found [here](https://drive.google.com/file/d/1WkUn1CqaiPx9XD_V5X-s9VxybsdtgnwK/view?usp=sharing)
 
 ## License
 
