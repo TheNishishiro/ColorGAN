@@ -23,3 +23,9 @@ So I decided to clean up the code and retrain it from scratch.
 ## Things to do
 
 I don't have much of a free time, but I would like to retrain this model for different anime related applications
+
+## Contribution
+
+If you are willing to help me with this project, please feel free to do so!
+
+I'm still very much just learning so if there are any improvements or mistakes you can correct me on then I would be very grateful.

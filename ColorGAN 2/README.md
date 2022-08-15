@@ -57,11 +57,11 @@ Put your colored images into **dataset\[datasetName]** folder
 
 As of right now you need to make sure that your images are in JPG format and have the same size, but I want to make it more flexible in the future.
 
-I used a dataset of about 90k images of anime faces from [here](https://www.kaggle.com/datasets/scribbless/another-anime-face-dataset). I cleaned it a little more before feeding it to the model since it still had some junk that weren't faces or didn't look much like human faces.
+I used a dataset of about 90k 256x256 images of anime faces from [here](https://www.kaggle.com/datasets/scribbless/another-anime-face-dataset). I cleaned it a little more before feeding it to the model since it still had some junk that weren't faces or didn't look much like human faces.
 
 ## Training
 
-I used my RTX 3080 GPU for training and testing.
+I used my RTX 3080 GPU for training and testing, with batch size of 16 to train it as quickly as possible.
 
 First I trained the generator in a supervised manner for 10 epochs to bring it up to speed with the dataset (about 3 hours).
 
