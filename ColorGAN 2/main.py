@@ -2,7 +2,7 @@ from Model.pix2pix import Pix2Pix
 
 if __name__ == '__main__':
     option = input('1) Create new model\n2) Load existing model\n')
-    gan = Pix2Pix(input('Enter model name: '), input('Enter dataset directory: '))
+    gan = Pix2Pix(input('Enter model name: '), input('Enter dataset directory: '), input('Dataset convert style ("", "sketch"): '))
     
     if option == '1':
         gan.Create()
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     
     if option == '1' or option == '2' or option == '3':
         batchSize = int(input('Enter batch size: '))
-        epochsCount = int(input('Number of epochs: '))
+        epochsCount = int(input('Number of epochs (will be applied to pretrain if checked): '))
         snapshotTime = int(input('Snapshot every x batches: '))
     
     if option == '1':
@@ -24,6 +24,6 @@ if __name__ == '__main__':
     if option == '2':
         gan.PreTrainGenerator(epochsCount, batchSize, snapshotTime)
     if option == '3':
-        gan.Train(adversarialEpochCount, batchSize, snapshotTime)
+        gan.Train(epochsCount, batchSize, snapshotTime)
     if option == '4':
         gan.PredictBatchFromPatch(input('Enter gray scaled image directory: '), input('Save prediction director: '))

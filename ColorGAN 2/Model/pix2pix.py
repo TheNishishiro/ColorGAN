@@ -15,9 +15,11 @@ ModelSavePath = "./trained_models/"
 LogPath = "./train_logs/"
 
 class Pix2Pix():
-    def __init__(self, modelName, datasetFolder):
+    def __init__(self, modelName, datasetFolder, inputConvertStyle):
         self.ModelName = modelName
         self.DataSetFolder = datasetFolder
+        self.MonoStyle = inputConvertStyle
+        self.ColorStyle = None
         self.InputImageHeight = 256
         self.InputImageWidth = 256
         self.EpochStart = 0
@@ -57,18 +59,18 @@ class Pix2Pix():
     def Load(self, version):
         self.EpochStart = version
         print(f"Loading {self.ModelName}_v{version} model...")
-        jsonFile = open(f"{ModelSavePath}d_{self.ModelName}_v{version}.json", 'r')
+        jsonFile = open(f"{ModelSavePath}{self.ModelName}/d_{self.ModelName}_v{version}.json", 'r')
         loadedJsonModel = jsonFile.read()
         jsonFile.close()
         self.Discriminator = model_from_json(loadedJsonModel)
-        self.Discriminator.load_weights(f"{ModelSavePath}d_{self.ModelName}_v{version}.h5", 'r')
+        self.Discriminator.load_weights(f"{ModelSavePath}{self.ModelName}/d_{self.ModelName}_v{version}.h5", 'r')
         print("Discriminator loaded successfuly")
         
-        jsonFile = open(f"{ModelSavePath}g_{self.ModelName}_v{version}.json", 'r')
+        jsonFile = open(f"{ModelSavePath}{self.ModelName}/g_{self.ModelName}_v{version}.json", 'r')
         loadedJsonModel = jsonFile.read()
         jsonFile.close()
         self.Generator = model_from_json(loadedJsonModel)
-        self.Generator.load_weights(f"{ModelSavePath}g_{self.ModelName}_v{version}.h5", 'r')
+        self.Generator.load_weights(f"{ModelSavePath}{self.ModelName}/g_{self.ModelName}_v{version}.h5", 'r')
         print("Generator loaded successfuly")
         
         self.ConstructCombined()
@@ -80,10 +82,11 @@ class Pix2Pix():
         self.SaveModel(self.Generator, f"g_{modelName}")
         
     def SaveModel(self, model, modelFullName):
+        os.makedirs(f'{ModelSavePath}{self.ModelName}', exist_ok=True)
         jsonModel = model.to_json()
-        with open(f"{ModelSavePath}{modelFullName}.json", "w") as jsonFile:
+        with open(f"{ModelSavePath}{self.ModelName}/{modelFullName}.json", "w") as jsonFile:
             jsonFile.write(jsonModel)
-        model.save_weights(f"{ModelSavePath}{modelFullName}.h5")
+        model.save_weights(f"{ModelSavePath}{self.ModelName}/{modelFullName}.h5")
         
     def ConstructCombined(self):
         self.Discriminator.compile(loss='mse', optimizer=self.DiscriminatorOptimizer, metrics=['accuracy'])
@@ -117,7 +120,7 @@ class Pix2Pix():
         valid = np.ones((batchSize,) + self.DiscriminatorPatch) * 0.9
         fake = np.zeros((batchSize,) + self.DiscriminatorPatch)
         for epoch in range(self.EpochStart, epochs):
-            for batch_i, (colorImages, monoImages, batches) in enumerate(LoadBatch(batchSize, self.DataSetFolder, (self.InputImageWidth, self.InputImageHeight), False, False, False)):
+            for batch_i, (colorImages, monoImages, batches) in enumerate(LoadBatch(batchSize, self.DataSetFolder, (self.InputImageWidth, self.InputImageHeight), False, True, True, self.MonoStyle, self.ColorStyle)):
                 # Color image
                 fakeColor = self.Generator.predict(monoImages)
                 
@@ -135,7 +138,7 @@ class Pix2Pix():
                 
                 if batch_i % sampleInterval == 0:
                     self.Save(str(epoch))  
-                    Predict(self.Generator, self.DataSetFolder, "./test_output", str(epoch), str(batch_i), (self.InputImageWidth, self.InputImageHeight))
+                    Predict(self.Generator, self.DataSetFolder, f"./test_output/{self.ModelName}", str(epoch), str(batch_i), (self.InputImageWidth, self.InputImageHeight), True, self.MonoStyle, self.ColorStyle)
                 
     def PreTrainGenerator(self, epochs, batchSize=1, sampleInterval=50):
         os.makedirs(LogPath, exist_ok=True)
@@ -143,7 +146,7 @@ class Pix2Pix():
         log = open(f'{LogPath}pretrain_{self.ModelName}_{start_time.strftime("%Y_%m_%d-%I_%M_%S_%p")}.log', 'w')
         
         for epoch in range(epochs):
-            for batch_i, (colorImages, monoImages, batches) in enumerate(LoadBatch(batchSize, self.DataSetFolder, (self.InputImageWidth, self.InputImageHeight), False, True, True)):
+            for batch_i, (colorImages, monoImages, batches) in enumerate(LoadBatch(batchSize, self.DataSetFolder, (self.InputImageWidth, self.InputImageHeight), False, True, True, self.MonoStyle, self.ColorStyle)):
                 
                 gLoss = self.Generator.train_on_batch(monoImages, colorImages)
                 elapsed_time = datetime.datetime.now() - start_time
@@ -152,7 +155,7 @@ class Pix2Pix():
                 log.write(f'\n{epoch};{batch_i};{gLoss[0]};{gLoss[1]};{elapsed_time}')
                 if batch_i % sampleInterval == 0:
                     self.Save(str(epoch))  
-                    Predict(self.Generator, self.DataSetFolder, "./test_pretrain_output", str(epoch), str(batch_i), (self.InputImageWidth, self.InputImageHeight))
+                    Predict(self.Generator, self.DataSetFolder, f"./test_pretrain_output/{self.ModelName}", str(epoch), str(batch_i), (self.InputImageWidth, self.InputImageHeight), True, self.MonoStyle, self.ColorStyle)
                     
     def PredictFromPath(self, imagePath, savePath = None):
         image = LoadImage(imagePath, (self.InputImageHeight, self.InputImageWidth), True)

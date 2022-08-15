@@ -42,21 +42,19 @@ ColorGAN 2
 
 And explanation for each one:
 
-**test_output** - Here you will find snapshots from your training progress
+**test_output** - Here you will find snapshots from your training progress, inside of a folder with your model name
 
-**test_pretrain_output** - Here you will find snapshots from your pretraining progress
+**test_pretrain_output** - Here you will find snapshots from your pretraining progress, inside of a folder with your model name
 
 **train_logs** - Here you will find training logs with your loss and accuracy
 
-**trained_models** - Here you will find your trained models
+**trained_models** - Here you will find your trained models, inside of a folder with your model name
 
 **test_set** - Here goes your test image set for batch prediction
 
 **test_predictions** - Here you will find your batch predictions
 
 ## Preparing dataset
-
-Put your colored images into **dataset\[datasetName]** folder
 
 As of right now you need to make sure that your images are in JPG format and have the same size, but I want to make it more flexible in the future.
 
@@ -84,7 +82,7 @@ For some reason reloading model mid training seems to help (?), not quite sure w
 
 ## Using pretrained model
 
-In order to use my pretrained model put both *.h5 and *.json files into the **trained_models** folder.
+In order to use my pretrained model put both *.h5 and *.json files into the **trained_models/[modelName]/** folder.
 
 then run the application
 
@@ -97,12 +95,14 @@ and follow on screen commands to load the model and predict an image:
 ```
 1) Create new model
 2) Load existing model
-   2
-   Enter model name: FaceGan
-   Enter dataset directory: 
-   Enter model version: 11
-   Loading FaceGan_v11 model...
+    2
+    Enter model name: FaceGan
+    Enter dataset directory: 
+    Dataset convert style ("", "sketch"):
+    Enter model version: 11
+    Loading FaceGan_v11 model...
 ```
+Dataset convert style can be used to convert dataset input style, for example empty will feed gray scaled images into the model while sketch style will convert images to sketch before feeding them in
 
 from here you can resume training or predict images from **test_set** or any other folder
 
