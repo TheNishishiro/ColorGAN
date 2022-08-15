@@ -32,16 +32,15 @@ First of all you will need a proper folder structure, most of it should be creat
 
 ```
 ColorGAN 2
-  dataset\
   test_output\
   test_pretrain_output\
   train_logs\
   trained_models\
+  test_set\
+  test_predictions\
 ```
 
 And explanation for each one:
-
-**dataset\\[datasetName]\\** - Here goes your colored dataset
 
 **test_output** - Here you will find snapshots from your training progress
 
@@ -50,6 +49,10 @@ And explanation for each one:
 **train_logs** - Here you will find training logs with your loss and accuracy
 
 **trained_models** - Here you will find your trained models
+
+**test_set** - Here goes your test image set for batch prediction
+
+**test_predictions** - Here you will find your batch predictions
 
 ## Preparing dataset
 
@@ -65,7 +68,7 @@ I used my RTX 3080 GPU for training and testing, with batch size of 16 to train 
 
 First I trained the generator in a supervised manner for 10 epochs to bring it up to speed with the dataset (about 3 hours).
 
-Then the adversarial training began where I trained both generator and discriminator for about 10 epochs to get presented results (about 6 hours)
+Then the adversarial training began where I trained both generator and discriminator for about 11 epochs to get presented results (about 6 hours)
 
 Loss of a generator steadily went down and oscillated around 9-10
 
@@ -75,33 +78,93 @@ For some reason reloading model mid training seems to help (?), not quite sure w
 
 ## Using pretrained model
 
-TODO
+In order to use my pretrained model put both *.h5 and *.json files into the **trained_models** folder.
 
-## Running the test
+then run the application
 
-TODO
+```
+python main.py
+```
+
+and follow on screen commands to load the model and predict an image:
+
+```
+1) Create new model
+2) Load existing model
+   2
+   Enter model name: FaceGan
+   Enter dataset directory: 
+   Enter model version: 11
+   Loading FaceGan_v11 model...
+```
+
+from here you can resume training or predict images from **test_set** or any other folder
+
+```
+1) Full training
+2) Pretrain generator
+3) Train adversarial model
+4) Predict batch
+    4
+    Enter gray scaled image directory:
+    Save prediction director:
+```
+
+Empty prediction director will save predictions to **test_predictions** folder and empty gray scaled image directory will predict images from **test_set** folder
+
+## Training model yourself
+
+You can train the model yourself, just remember to adjust model input accordingly to image size you will be inputting
+
+```
+self.InputImageHeight = 256 # your image height
+self.InputImageWidth = 256 # your image width
+```
+
+Keep in mind that image size needs to be divisible by 64 and if it smaller than 256x256 might require removing a few layers from the generator and discriminator
 
 ## Running web app
 
-TODO
+You can run the web app by running the following command:
+
+```
+python api.py ModelName ModelVersion
+
+ex.
+python api.py FaceGan 11
+```
+
+Endpoint is available at http://localhost:5000/pix2pix
+
+so just send a POST request with an image to the endpoint and it will return the predicted image
+
+This repository also contains a .NET application to POST images to this API and it is available [here](https://github.com/TheNishishiro/ColorGAN/tree/master/ColorGanInterface) 
 
 ## Results
 
-### Anime characters:
+### Anime faces:
 
-TODO
+Predictions for faces from dataset
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_dataset.png)
+
+Predictions for faces from outside of dataset
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_unseen.png)
 
 ### Manga pages
 
-TODO
+TODO, untrained yet
 
 ## Models for download
 
-TODO
+Model for faces **FaceGan** version **11** is avaiable [here](https://drive.google.com/file/d/1bi4JtNZf7JcVK8VRNaLMaNdrdlK9GmMM/view?usp=sharing)
+
+I'll post more models once I get to train them
 
 ## Dataset (18+ warning)
 
-TODO
+TODO, unavailable yet, check legacy implementation for old dataset
 
 ## License
 

@@ -133,59 +133,53 @@ Test set:
 
 Epoch 1:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/1.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/1.png)
 
 Epoch 2:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/2.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/2.png)
 
 Epoch 3:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/3.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/3.png)
 
 Epoch 4:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/4.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/4.png)
 
 Epoch 5:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/5.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/5.png)
 
 Epoch 6:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/6.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/6.png)
 
 Epoch 7:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/7.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/7.png)
 
 Epoch 8:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/8.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/8.png)
 
 Epoch 9:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/9.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/9.png)
 
 Epoch 10:
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/10.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/10.png)
 
 ### Manga pages
 
-![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/output/manga.png)
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN_Legacy/output/manga.png)
 
 ## Models for download
 
-3 of my pretrained models can be found [here](https://drive.google.com/drive/folders/1e3vJHR9x4Yci6UAFbAz0rv14oh9HJwY3?usp=sharing)
+Unfortunately I must have accidentally remove models for this implementation :(
 
-Each model is represented by 4 files **d_name_version.json**, **d_name_version.h5**, **g_name_version.json** and **g_name_version.h5**.
-
-*face* - For face coloring like examples up there (input of 256x256)
-
-*hGAN* - For coloring of hentai pages (input of 256x384)(included versions 24 and 35 because I only checked v24 and am not sure if v35 isn't overfitted)
-
-Download 4 files of a model and put them into **models** folder
+Please refer to ColorGAN 2 for pretrained models once I trained and published them
 
 ## Dataset (18+ warning)
 
