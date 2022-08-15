@@ -60,9 +60,14 @@ def NormalizeColorValues(image):
 def UnNormalizeColorValues(image):
     return (0.5 * np.array(image) + 0.5) * 255
 
-def PredictRandom(generator, folderPath, outputFolder, epoch, batchIndex, size):
+def Predict(generator, folderPath, outputFolder, epoch, batchIndex, size, randomize=True):
+    os.makedirs(folderPath, exist_ok=True)
     path = glob(f'{folderPath}/*')
-    batch_images = np.random.choice(path, size=3)
+    
+    if randomize == True:
+        batch_images = np.random.choice(path, size=3)
+    else:
+        batch_images = path
 
     conc = []
     conFinal = []
@@ -90,4 +95,7 @@ def PredictRandom(generator, folderPath, outputFolder, epoch, batchIndex, size):
 
     image = Image.fromarray(conFinal.astype('uint8'), 'RGB')
     os.makedirs(outputFolder, exist_ok=True)
-    image.save(f"{outputFolder}/{epoch}_{batchIndex}.png")
+    if epoch == None:
+        image.save(f"{outputFolder}/prediction.png")
+    else:
+        image.save(f"{outputFolder}/{epoch}_{batchIndex}.png")

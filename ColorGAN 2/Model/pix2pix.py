@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 
 from Builders.ModelBuilder import BuildDiscriminator, BuildGenerator
-from DataLoaders.FolderDatasetLoader import LoadBatch, PredictRandom, LoadImage, UnNormalizeColorValues, NormalizeColorValues
+from DataLoaders.FolderDatasetLoader import LoadBatch, Predict, LoadImage, UnNormalizeColorValues, NormalizeColorValues
 
 ModelSavePath = "./trained_models/"
 LogPath = "./train_logs/"
@@ -135,7 +135,7 @@ class Pix2Pix():
                 
                 if batch_i % sampleInterval == 0:
                     self.Save(str(epoch))  
-                    PredictRandom(self.Generator, self.DataSetFolder, "./test_output", str(epoch), str(batch_i), (self.InputImageWidth, self.InputImageHeight))
+                    Predict(self.Generator, self.DataSetFolder, "./test_output", str(epoch), str(batch_i), (self.InputImageWidth, self.InputImageHeight))
                 
     def PreTrainGenerator(self, epochs, batchSize=1, sampleInterval=50):
         os.makedirs(LogPath, exist_ok=True)
@@ -152,7 +152,7 @@ class Pix2Pix():
                 log.write(f'\n{epoch};{batch_i};{gLoss[0]};{gLoss[1]};{elapsed_time}')
                 if batch_i % sampleInterval == 0:
                     self.Save(str(epoch))  
-                    PredictRandom(self.Generator, self.DataSetFolder, "./test_pretrain_output", str(epoch), str(batch_i), (self.InputImageWidth, self.InputImageHeight))
+                    Predict(self.Generator, self.DataSetFolder, "./test_pretrain_output", str(epoch), str(batch_i), (self.InputImageWidth, self.InputImageHeight))
                     
     def PredictFromPath(self, imagePath, savePath = None):
         image = LoadImage(imagePath, (self.InputImageHeight, self.InputImageWidth), True)
@@ -176,5 +176,9 @@ class Pix2Pix():
         if savePath != None:
             image.save(f"{savePath}/prediction.png")
         return image
+    
+    def PredictBatchFromPatch(self, imagesPath, savePath = None):
+        Predict(self.Generator, imagesPath or './test_set', savePath or './test_predictions', None, None, (self.InputImageWidth, self.InputImageHeight), False)
+        
 
 
