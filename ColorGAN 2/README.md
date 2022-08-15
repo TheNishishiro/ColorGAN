@@ -62,6 +62,12 @@ As of right now you need to make sure that your images are in JPG format and hav
 
 I used a dataset of about 90k 256x256 images of anime faces from [here](https://www.kaggle.com/datasets/scribbless/another-anime-face-dataset). I cleaned it a little more before feeding it to the model since it still had some junk that weren't faces or didn't look much like human faces.
 
+### Converting dataset
+
+There is a DatasetConverter.py in Converters folder that could help you in changing a style of your dataset.
+
+For example you could convert every image in your dataset folder to a sketch or an oil painting, might come in handy with future models
+
 ## Training
 
 I used my RTX 3080 GPU for training and testing, with batch size of 16 to train it as quickly as possible.
