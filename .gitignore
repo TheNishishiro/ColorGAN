@@ -135,3 +135,9 @@ cycleModels/*
 ColorGanInterface/.idea
 ColorGanInterface/bin/*
 ColorGanInterface/obj/*
+ColorGAN 2/test_output
+ColorGAN 2/test_predictions
+ColorGAN 2/test_pretrain_output
+ColorGAN 2/test_set
+ColorGAN 2/train_logs
+ColorGAN 2/trained_models
