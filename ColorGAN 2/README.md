@@ -144,6 +144,8 @@ This repository also contains a .NET application to POST images to this API and 
 
 ### Anime faces:
 
+Random samples, I didn't bother to search for the best or the worse
+
 Predictions for faces from dataset (1st row - input, 2nd row - output, 3rd row - ground truth)
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_dataset.png)
