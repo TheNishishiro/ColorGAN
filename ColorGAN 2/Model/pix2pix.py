@@ -120,7 +120,7 @@ class Pix2Pix():
         valid = np.ones((batchSize,) + self.DiscriminatorPatch) * 0.9
         fake = np.zeros((batchSize,) + self.DiscriminatorPatch)
         for epoch in range(self.EpochStart, epochs):
-            for batch_i, (colorImages, monoImages, batches) in enumerate(LoadBatch(batchSize, self.DataSetFolder, (self.InputImageWidth, self.InputImageHeight), False, True, True, self.MonoStyle, self.ColorStyle)):
+            for batch_i, (colorImages, monoImages, batches) in enumerate(LoadBatch(batchSize, self.DataSetFolder, (self.InputImageWidth, self.InputImageHeight), False, True, False, self.MonoStyle, self.ColorStyle)):
                 # Color image
                 fakeColor = self.Generator.predict(monoImages)
                 
@@ -145,8 +145,8 @@ class Pix2Pix():
         start_time = datetime.datetime.now()
         log = open(f'{LogPath}pretrain_{self.ModelName}_{start_time.strftime("%Y_%m_%d-%I_%M_%S_%p")}.log', 'w')
         
-        for epoch in range(epochs):
-            for batch_i, (colorImages, monoImages, batches) in enumerate(LoadBatch(batchSize, self.DataSetFolder, (self.InputImageWidth, self.InputImageHeight), False, True, True, self.MonoStyle, self.ColorStyle)):
+        for epoch in range(self.EpochStart, epochs):
+            for batch_i, (colorImages, monoImages, batches) in enumerate(LoadBatch(batchSize, self.DataSetFolder, (self.InputImageWidth, self.InputImageHeight), True, True, True, self.MonoStyle, self.ColorStyle)):
                 
                 gLoss = self.Generator.train_on_batch(monoImages, colorImages)
                 elapsed_time = datetime.datetime.now() - start_time
@@ -181,7 +181,7 @@ class Pix2Pix():
         return image
     
     def PredictBatchFromPatch(self, imagesPath, savePath = None):
-        Predict(self.Generator, imagesPath or './test_set', savePath or './test_predictions', None, None, (self.InputImageWidth, self.InputImageHeight), False)
+        Predict(self.Generator, imagesPath or './test_set', savePath or './test_predictions', None, None, (self.InputImageWidth, self.InputImageHeight), False, self.MonoStyle, self.ColorStyle)
         
 
 

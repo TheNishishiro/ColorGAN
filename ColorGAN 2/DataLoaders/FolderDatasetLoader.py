@@ -47,7 +47,7 @@ def LoadImage(imagePath, size, isResize = True, grayStyle = None, colorStyle = N
 
 def LoadAndTransformImage(image, convertType, size, leftFlipSeed, upsideDownFlipSeed, isResize = True, isFlipLeftRight = True, isFlipTopDown = False, style = None):
     loadedImage = Image.open(image)
-    if style == None:
+    if style == None or style == "":
         loadedImage = loadedImage.convert(convertType)
     elif style == 'sketch':
         cvImage = PilToOpenCv(loadedImage)

@@ -148,9 +148,9 @@ This repository also contains a .NET application to POST images to this API and 
 
 ## Results
 
-### Anime faces:
-
 Random samples, I didn't bother to search for the best or the worse
+
+### Anime faces (Grayscale → Color):
 
 Predictions for faces from dataset (1st row - input, 2nd row - output, 3rd row - ground truth)
 
@@ -159,6 +159,12 @@ Predictions for faces from dataset (1st row - input, 2nd row - output, 3rd row -
 Predictions for faces from outside of dataset
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_unseen.png)
+
+### Anime faces (Sketch → Color)
+
+This one was difficult to train, I'm not sure whether longer training would improve results
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_sketch.png)
 
 ### Manga pages
 
