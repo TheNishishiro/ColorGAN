@@ -102,7 +102,7 @@ and follow on screen commands to load the model and predict an image:
     Enter model version: 11
     Loading FaceGan_v11 model...
 ```
-Dataset convert style can be used to convert dataset input style, for example empty will feed gray scaled images into the model while sketch style will convert images to sketch before feeding them in
+Dataset convert style can be used to convert dataset input style, for example empty will feed grayscaled images into the model while sketch style will convert images to sketch before feeding them in
 
 from here you can resume training or predict images from **test_set** or any other folder
 
@@ -116,7 +116,7 @@ from here you can resume training or predict images from **test_set** or any oth
     Save prediction director:
 ```
 
-Empty prediction director will save predictions to **test_predictions** folder and empty gray scaled image directory will predict images from **test_set** folder
+Empty prediction director will save predictions to **test_predictions** folder and empty grayscaled image directory will predict images from **test_set** folder
 
 ## Training model yourself
 
@@ -164,7 +164,9 @@ Predictions for faces from outside of dataset
 
 This one was difficult to train and I had to pick a specific model snapshot for decent results, I'm not sure whether longer training would improve anything since it seemed to spit out trash every couple iterations
 
-Dataset doesn't make it easier with messy backgrounds but I'm not sure how much of an impact it had on results
+Dataset doesn't make it easier with messy backgrounds but I'm not sure how much of an impact it had in the end
+
+Anyways, I took the same approach as I did with grayscaled images
 
 Once again, results from the dataset
 
