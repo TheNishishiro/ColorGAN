@@ -183,7 +183,9 @@ TODO, untrained yet
 
 ## Models for download
 
-Model for faces **FaceGan** version **11** is avaiable [here](https://drive.google.com/file/d/1bi4JtNZf7JcVK8VRNaLMaNdrdlK9GmMM/view?usp=sharing)
+Model for faces **FaceGan** version **11** is avaiable [here](https://drive.google.com/file/d/1ISyhPghbO_PXITYofTanClbER1k6vNbk/view?usp=sharing)
+
+Model for sketches **LineGan** version **10** is avaiable [here](https://drive.google.com/file/d/1rs3yWfHaelZOZJrUIGs1DCfQC2kjwJrN/view?usp=sharing)
 
 I'll post more models once I get to train them
 
