@@ -152,8 +152,9 @@ Random samples, I didn't bother to search for the best or the worse
 
 ### Anime faces (Grayscale → Color):
 
-Predictions for faces from dataset (1st row - input, 2nd row - output, 3rd row - ground truth)
+Predictions for faces from dataset (random samples)
 
+(1st row - input, 2nd row - output, 3rd row - ground truth)
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_dataset.png)
 
 Predictions for faces from outside of dataset
@@ -168,7 +169,7 @@ Dataset doesn't make it easier with messy backgrounds but I'm not sure how much 
 
 Anyways, I took the same approach as I did with grayscaled images
 
-Once again, results from the dataset
+Once again, results from the dataset (random samples)
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_sketch_dataset.png)
 
