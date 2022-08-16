@@ -68,12 +68,12 @@ def NormalizeColorValues(image):
 def UnNormalizeColorValues(image):
     return (0.5 * np.array(image) + 0.5) * 255
 
-def Predict(generator, folderPath, outputFolder, epoch, batchIndex, size, randomize=True, grayStyle = None, colorStyle = None):
+def Predict(generator, folderPath, outputFolder, epoch, batchIndex, size, randomize=True, grayStyle = None, colorStyle = None, choiceAmount = 3):
     os.makedirs(folderPath, exist_ok=True)
     path = glob(f'{folderPath}/*')
     
     if randomize == True:
-        batch_images = np.random.choice(path, size=3)
+        batch_images = np.random.choice(path, size=choiceAmount)
     else:
         batch_images = path
 

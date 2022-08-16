@@ -181,7 +181,7 @@ class Pix2Pix():
         return image
     
     def PredictBatchFromPatch(self, imagesPath, savePath = None):
-        Predict(self.Generator, imagesPath or './test_set', savePath or './test_predictions', None, None, (self.InputImageWidth, self.InputImageHeight), False, self.MonoStyle, self.ColorStyle)
+        Predict(self.Generator, imagesPath or './test_set', savePath or './test_predictions', None, None, (self.InputImageWidth, self.InputImageHeight), False, self.MonoStyle, self.ColorStyle, 8)
         
 
 

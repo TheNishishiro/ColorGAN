@@ -162,7 +162,15 @@ Predictions for faces from outside of dataset
 
 ### Anime faces (Sketch → Color)
 
-This one was difficult to train, I'm not sure whether longer training would improve results
+This one was difficult to train and I had to pick a specific model snapshot for decent results, I'm not sure whether longer training would improve anything since it seemed to spit out trash every couple iterations
+
+Dataset doesn't make it easier with messy backgrounds but I'm not sure how much of an impact it had on results
+
+Once again, results from the dataset
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_sketch_dataset.png)
+
+And predictions for unseen images
 
 ![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_sketch.png)
 
