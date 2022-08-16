@@ -165,9 +165,9 @@ Predictions for faces from outside of dataset
 
 This one was difficult to train and I had to pick a specific model snapshot for decent results, I'm not sure whether longer training would improve anything since it seemed to spit out trash every couple iterations
 
-Dataset doesn't make it easier with messy backgrounds but I'm not sure how much of an impact it had in the end
+Dataset doesn't make it easier with messy backgrounds but I'm not sure how much of an impact it had in the end.
 
-Anyways, I took the same approach as I did with grayscaled images
+Anyways, I took the same approach as I did with grayscaled images, just that I converted the grayscaled images into sketches using OpenCV magic before feeding them into the network
 
 Once again, results from the dataset (random samples)
 
