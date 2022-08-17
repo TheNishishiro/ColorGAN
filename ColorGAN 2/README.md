@@ -179,7 +179,24 @@ And predictions for unseen images
 
 ### Manga pages
 
-TODO, untrained yet
+<details>
+<summary>Hentai pages (+18)</summary>
+
+This one is a stretch, fairly small dataset of about 30k pages without any filtering out of trash, pretrained generator for 20 epochs and trained adversarial model for another 20
+
+In the end I think it did overfit as one issue, the other issue is that converting colored pages to grayscale does not reflect the same detail as original grayscaled manga which makes transfer much more difficult
+
+results from the dataset (random samples)
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_hentai_dataset.png)
+
+predictions for unseen images
+
+![alt text](https://raw.githubusercontent.com/TheNishishiro/ColorGAN/master/ColorGAN%202/Example%20outputs/prediction_hentai_unseen.png)
+
+I will be working on a new, cleaner dataset and look for a way to make colored manga look closer to grayscaled 
+
+</details>
 
 ## Models for download
 
