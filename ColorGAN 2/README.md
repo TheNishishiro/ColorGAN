@@ -1,6 +1,6 @@
 # ColorGAN
 
-GAN to color gray scaled anime images.
+GAN to color gray scaled anime images. It uses Pix2Pix GAN model for training
 
 The goal was to keep the code as simple as possible so anyone can use it as a base for their own projects but it can also be ran as is.
 
@@ -184,7 +184,7 @@ And predictions for unseen images
 
 This one is a stretch, fairly small dataset of about 30k pages without any filtering out of trash, pretrained generator for 20 epochs and trained adversarial model for another 20
 
-In the end I think it did overfit as one issue, the other issue is that converting colored pages to grayscale does not reflect the same detail as original grayscaled manga which makes transfer much more difficult
+In the end I think it did overfit as one issue, the other issue is that converting colored pages to grayscale does not reflect the same level of detail as original grayscaled manga which makes transfer much more difficult (e.g. accurate shading of objects)
 
 results from the dataset (random samples)
 
