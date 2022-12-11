@@ -1,0 +1,9 @@
+python_version >= 3.6
+Keras
+numpy
+glob2
+pillow
+scipy
+Flask
+tensorflow
+tensorflow_addons
